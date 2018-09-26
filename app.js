@@ -20,5 +20,22 @@ const view = function(content){
        })
      
        $("#add").on("click",view);
-
+       const verify = function(){
+        let verifyName = prompt("Please input a name");
+      
+        for (let i = 0; i < employeeList.length; i++) {
+      
+          if(employeeList[i].name === verifyName){
+      
+            alert("Name is already on the list");
+            return;
+          }
+            else {
+      
+              alert("Name is not on the list.");
+              return;
+            }
+          }
+        }
+       $("#verify").on("click",verify);
        
