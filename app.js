@@ -38,4 +38,12 @@ const view = function(content){
           }
         }
        $("#verify").on("click",verify);
+
+       const removeName = function() {
+        const nameVal = $('#name').val();
+        employeeList.splice(employeeList.indexOf(nameVal), 1);
+        $('#name,#phoneNum, #officeNum').val('');
+      }
+      
+      $('#delete').on('click', removeName);
        
