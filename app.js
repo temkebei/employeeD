@@ -46,4 +46,17 @@ const view = function(content){
       }
       
       $('#delete').on('click', removeName);
+
+      const update = function(){
+        let updateName = prompt("Please input a name");
+      
+        for (let i = 0; i < employeeList.length; i++) {
+      
+          if(employeeList[i].name === updateName){
+            employeeList[i].phoneNum = $("#phoneNum").val();
+            employeeList[i].officeNum = $("#officeNum").val();
+            }
+          }
+        }
+        $("#update").on("click", update);
        
