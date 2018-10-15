@@ -1,62 +1,129 @@
-const view = function(content){
-    $(".content").empty();
-       for (let i = 0; i < employeeList.length; i++) {
-       $(".content").append("<div>"+"<p>"+ employeeList[i].name +"</p>"+"<p>"+ employeeList[i].
-      officeNum +"</p>"+"<p>"+ employeeList[i].phoneNum +"</p>"+"</div>");
-       }
+let command = '';
+
+const print = function () {
+  let htmlStr = '';
+  for (let i = 0; i < employeeList.length; i++) {
+    htmlStr += `<div class="entry"><p> ${employeeList[i].name}</p><p> ${employeeList[i].officeNum}</p><p> ${employeeList[i].phoneNum}</p></div>`;
+  }
+  render(htmlStr);
+}
+
+const add = function () {
+  const userName = $('#name').val();
+  const officeNum = $('#office').val();
+  const phoneNum = $('#phone').val();
+  employeeList.push({
+    name: userName,
+    officeNum: officeNum,
+    phoneNum: phoneNum
+  })
+  print();
+}
+
+const verify = function () {
+  const userName = $('#name').val();
+  let htmlStr = 'no';
+  for (let i = 0; i < employeeList.length; i++) {
+    if (employeeList[i].name === userName) {
+      htmlStr = 'yes';
     }
-    $("#view").on("click",view);
+  }
+  render(htmlStr);
+}
 
-    $("#add").on("click", function(event) {
-        const name = $("#name").val();
-        const officeNum = $("#officeNum").val();
-        const phoneNum = $("#phoneNum").val();
-        let newEmployee = {
-         name:name,
-         officeNum:officeNum,
-         phoneNum:phoneNum
-        }
-        employeeList.push(newEmployee);
-       })
-     
-       $("#add").on("click",view);
-       const verify = function(){
-        let verifyName = prompt("Please input a name");
-      
-        for (let i = 0; i < employeeList.length; i++) {
-      
-          if(employeeList[i].name === verifyName){
-      
-            alert("Name is already on the list");
-            return;
-          }
-            else {
-      
-              alert("Name is not on the list.");
-              return;
-            }
-          }
-        }
-       $("#verify").on("click",verify);
+const update = function () {
+  const userName = $('#name').val();
+  const officeNum = $('#office').val();
+  const phoneNum = $('#phone').val();
+  for (let i = 0; i < employeeList.length; i++) {
+    if (employeeList[i].name === userName) {
+      employeeList[i].officeNum = officeNum;
+      employeeList[i].phoneNum = phoneNum;
+    }
+  }
+  print();
+}
 
-       const removeName = function() {
-        const nameVal = $('#name').val();
-        employeeList.splice(employeeList.indexOf(nameVal), 1);
-        $('#name,#phoneNum, #officeNum').val('');
-      }
-      
-      $('#delete').on('click', removeName);
+const remove = function () {
+  const userName = $('#name').val();
+  for (let i = 0; i < employeeList.length; i++) {
+    if (employeeList[i].name === userName) {
+      employeeList.splice(i, 1);
+    }
+  }
+  print();
+}
 
-      const update = function(){
-        let updateName = prompt("Please input a name");
-      
-        for (let i = 0; i < employeeList.length; i++) {
-      
-          if(employeeList[i].name === updateName){
-            employeeList[i].phoneNum = $("#phoneNum").val();
-            employeeList[i].officeNum = $("#officeNum").val();
-            }
-          }
-        }
-        $("#update").on("click", update);
-       
+
+
+
+const runCommand = function (event) {
+  console.log('add');
+  event.preventDefault();
+  switch (command) {
+    case 'add':
+      add();
+      break;
+    case 'verify':
+      verify();
+      break;
+    case 'update':
+      update();
+      break;
+    case 'delete':
+      remove();
+      break;
+  }
+}
+
+const setView = function () {
+  $('#list').empty();
+  command = '';
+  $('form').hide();
+  print();
+}
+
+const setAdd = function () {
+  $('#list').empty();
+  command = 'add';
+  $('form').show();
+  $('.extra-inputs').show();
+}
+
+const setVerify = function () {
+  $('#list').empty();
+  command = 'verify';
+  $('form').show();
+  $('.extra-inputs').hide();
+}
+
+const setUpdate = function () {
+  $('#list').empty();
+  command = 'update';
+  $('form').show();
+  $('.extra-inputs').show();
+}
+
+const setDelete = function () {
+  $('#list').empty();
+  command = 'delete';
+  $('form').show();
+  $('.extra-inputs').hide();
+}
+
+
+
+
+const render = function (htmlStr) {
+  $('#list').html(htmlStr);
+}
+
+$('#view').on('click', setView);
+$('#add').on('click', setAdd);
+$('#verify').on('click', setVerify);
+$('#update').on('click', setUpdate);
+$('#delete').on('click', setDelete);
+
+$('#submit').on('click', runCommand);
+
+$('form').hide();
